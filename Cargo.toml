@@ -1,0 +1,19 @@
+[package]
+name = "hf"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+holochain_conductor_api = "0.1.0"
+holochain_keystore = "0.1.0"
+holochain_types = "0.1.0"
+holochain_client = "0.3.0"
+lair_keystore_api = "0.2.3"
+tokio = { version = "1.11", features = [ "full" ] }
+structopt = "0.3.0"
+serde = { version = "1.0", features = ["derive"] }
+url2 = "0.0.6"
+sodoken = "=0.0.7"
+getrandom = "0.2.7"
+rmp-serde = "1.1.1"
