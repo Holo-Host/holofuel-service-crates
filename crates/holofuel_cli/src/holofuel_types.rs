@@ -26,7 +26,7 @@ pub struct Actionable {
     pub promise_actionable: Vec<Transaction>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, SerializedBytes)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub struct Transaction {
     pub id: EntryHashB64,
     pub amount: String,
@@ -42,19 +42,19 @@ pub struct Transaction {
     pub url: Option<String>,
     pub expiration_date: Option<String>,
 }
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Copy)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum TransactionType {
     Request, //Invoice
     Offer,   //Promise
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Copy)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum TransactionDirection {
     Outgoing, // To(Address),
     Incoming, // From(Address),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Copy)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum TransactionStatus {
     Actionable, // tx that is create by 1st instance and waiting for counterparty to complete the tx
     Pending,    // tx that was created by 1st instance and second instance

@@ -1,5 +1,4 @@
 use anyhow::Result;
-use hf;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
