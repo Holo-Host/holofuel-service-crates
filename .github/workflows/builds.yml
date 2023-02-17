@@ -35,7 +35,7 @@ jobs:
           args: --release --all-features
 
   linter:
-    name: Run linters
+    name: linters
     runs-on: ubuntu-latest
 
     steps:
