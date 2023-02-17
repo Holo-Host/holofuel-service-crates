@@ -1,6 +1,6 @@
 use super::holo_config::{self, HappsFile, APP_PORT};
 use anyhow::{anyhow, Context, Result};
-use holochain_client::AppWebsocket;
+use holochain_client::{AgentPubKey, AppWebsocket};
 use holochain_conductor_api::{AppInfo, CellInfo, ProvisionedCell, ZomeCall};
 use holochain_keystore::MetaLairClient;
 use holochain_types::prelude::{
@@ -41,7 +41,7 @@ impl HolofuelAgent {
         })
     }
 
-    pub async fn get_cell(&mut self) -> Result<ProvisionedCell> {
+    pub async fn get_cell(&mut self) -> Result<(ProvisionedCell, AgentPubKey)> {
         match self
             .app_websocket
             .app_info(self.core_app_id.clone())
@@ -51,13 +51,14 @@ impl HolofuelAgent {
             Some(AppInfo {
                 // This works on the assumption that the core apps has HHA in the first position of the vec
                 cell_info,
+                agent_pub_key,
                 ..
             }) => {
                 let cell = match &cell_info.get("holofuel").unwrap()[0] {
                     CellInfo::Provisioned(c) => c.clone(),
                     _ => return Err(anyhow!("unable to find holofuel")),
                 };
-                Ok(cell)
+                Ok((cell, agent_pub_key))
             }
             _ => Err(anyhow!("core-app is not installed")),
         }
@@ -67,16 +68,17 @@ impl HolofuelAgent {
         &mut self,
         zome_name: ZomeName,
         fn_name: FunctionName,
+        payload: ExternIO,
     ) -> Result<ExternIO> {
-        let cell = self.get_cell().await?;
+        let (cell, agent_pubkey) = self.get_cell().await?;
         let (nonce, expires_at) = fresh_nonce()?;
         let zome_call_unsigned = ZomeCallUnsigned {
-            cell_id: cell.cell_id.clone(),
+            cell_id: cell.cell_id,
             zome_name,
             fn_name,
-            payload: ExternIO::encode(())?,
+            payload,
             cap_secret: None,
-            provenance: cell.cell_id.agent_pubkey().clone(),
+            provenance: agent_pubkey,
             nonce,
             expires_at,
         };

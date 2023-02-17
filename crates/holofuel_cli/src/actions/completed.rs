@@ -1,6 +1,6 @@
 use super::holofuel_types::Transaction;
 use anyhow::Result;
-use holochain_types::prelude::{FunctionName, ZomeName};
+use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
 use holofuel_connect::HolofuelAgent;
 
 pub async fn get() -> Result<()> {
@@ -9,6 +9,7 @@ pub async fn get() -> Result<()> {
         .zome_call(
             ZomeName::from("transactor"),
             FunctionName::from("get_completed_transactions"),
+            ExternIO::encode(())?,
         )
         .await?;
 

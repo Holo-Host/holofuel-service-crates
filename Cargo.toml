@@ -3,6 +3,7 @@
 members = [
   "crates/holofuel_cli",
   "crates/holofuel_connect",
+  "crates/holofuel_init",
 ]
 
 [profile.dev]

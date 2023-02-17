@@ -1,4 +1,4 @@
-## holofuel services crates
+# holofuel service crates
 
 ## holofuel-cli
 A cli that runs on hpos to make holofuel zome-calls
@@ -21,3 +21,7 @@ SUBCOMMANDS:
     p       Gets the list of your pending transactions
 
 ```
+
+## holofuel-init
+
+This crate initializes the holochain init function and also set a profile name for the holofuel account
