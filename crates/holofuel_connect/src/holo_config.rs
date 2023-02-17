@@ -8,7 +8,7 @@ use std::env;
 use std::{fs::File, path::PathBuf};
 
 pub const APP_PORT: u16 = 42233;
-pub const ADMIN_PORT: u16 = 4444;
+// pub const ADMIN_PORT: u16 = 4444;
 
 pub fn default_password() -> Result<String> {
     env::var("DEVICE_SEED_DEFAULT_PASSWORD")
