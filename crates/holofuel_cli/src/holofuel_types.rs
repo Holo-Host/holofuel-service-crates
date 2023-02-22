@@ -1,3 +1,4 @@
+use holochain_types::prelude::AnyDhtHashB64;
 use holochain_types::prelude::{
     holochain_serial, AgentPubKeyB64, CapSecret, EntryHashB64, SerializedBytes,
 };
@@ -62,4 +63,12 @@ pub enum TransactionStatus {
     Completed,
     Declined,
     Expired,
+}
+
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
+pub struct Profile {
+    pub agent_address: AgentPubKeyB64,
+    pub nickname: Option<String>,
+    pub avatar_url: Option<String>,
+    pub uniqueness: AnyDhtHashB64,
 }

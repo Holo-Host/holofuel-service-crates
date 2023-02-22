@@ -11,7 +11,7 @@ pub struct HolofuelAgent {
     app_websocket: AppWebsocket,
     // admin_websocket: AdminWebsocket,
     keystore: MetaLairClient,
-    core_app_id: String,
+    holofuel_id: String,
 }
 
 impl HolofuelAgent {
@@ -31,20 +31,20 @@ impl HolofuelAgent {
         .await?;
 
         let app_file = HappsFile::build()?;
-        let core_app = app_file.core_app().unwrap();
+        let holofuel = app_file.holofuel().unwrap();
 
         Ok(Self {
             app_websocket,
             // admin_websocket,
             keystore,
-            core_app_id: core_app.id(),
+            holofuel_id: holofuel.id(),
         })
     }
 
     pub async fn get_cell(&mut self) -> Result<(ProvisionedCell, AgentPubKey)> {
         match self
             .app_websocket
-            .app_info(self.core_app_id.clone())
+            .app_info(self.holofuel_id.clone())
             .await
             .map_err(|err| anyhow!("{:?}", err))?
         {
@@ -60,7 +60,7 @@ impl HolofuelAgent {
                 };
                 Ok((cell, agent_pub_key))
             }
-            _ => Err(anyhow!("core-app is not installed")),
+            _ => Err(anyhow!("holofuel is not installed")),
         }
     }
 

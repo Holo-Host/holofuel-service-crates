@@ -11,7 +11,7 @@ pub const APP_PORT: u16 = 42233;
 // pub const ADMIN_PORT: u16 = 4444;
 
 pub fn default_password() -> Result<String> {
-    env::var("DEVICE_SEED_DEFAULT_PASSWORD")
+    env::var("HOLOCHAIN_DEFAULT_PASSWORD")
         .context("Failed to read HOLOCHAIN_DEFAULT_PASSWORD. Is it set in env?")
 }
 
@@ -78,11 +78,11 @@ pub struct HappsFile {
 }
 
 impl HappsFile {
-    pub fn core_app(self) -> Option<Happ> {
+    pub fn holofuel(self) -> Option<Happ> {
         let core_app = &self
             .core_happs
             .into_iter()
-            .find(|x| x.id().contains("core-app"));
+            .find(|x| x.id().contains("holofuel"));
         core_app.clone()
     }
 

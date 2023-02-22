@@ -15,6 +15,9 @@ pub enum Opt {
     /// Gets the list of your completed transactions
     #[structopt(name = "c")]
     Completed,
+    /// Gets profile details
+    #[structopt(name = "pr")]
+    Profile,
 }
 impl Opt {
     /// Run this command
@@ -24,6 +27,7 @@ impl Opt {
             Opt::Pending => hf::actions::pending::get().await?,
             Opt::Actionable => hf::actions::actionable::get().await?,
             Opt::Completed => hf::actions::completed::get().await?,
+            Opt::Profile => hf::actions::completed::get().await?,
         }
         Ok(())
     }
