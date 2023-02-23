@@ -17,7 +17,9 @@ pub async fn get() -> Result<()> {
 
     println!("===================");
     println!("Your Profile details are: ");
-    println!("{:?}", profile);
+    println!("Agent Pub key: {:?}", profile.agent_address);
+    println!("Nickname: {:?}", profile.nickname);
+    println!("Avatar: {:?}", profile.avatar_url);
     println!("===================");
 
     Ok(())

@@ -17,7 +17,11 @@ pub async fn get() -> Result<()> {
 
     println!("===================");
     println!("Your Pending List is: ");
-    println!("{:?}", txs);
+    println!("Invoices Pending: {:?}", txs.invoice_pending);
+    println!("Invoices Declined: {:?}", txs.invoice_declined);
+    println!("Promises Pending: {:?}", txs.promise_pending);
+    println!("Promises Declined: {:?}", txs.promise_declined);
+    println!("Accepted but now completed: {:?}", txs.accepted);
     println!(
         "Number of pending: {:?}",
         txs.invoice_pending.len() + txs.promise_pending.len()

@@ -17,7 +17,9 @@ pub async fn get() -> Result<()> {
 
     println!("===================");
     println!("Your Completed List is: ");
-    println!("{:?}", txs);
+    for tx in &txs {
+        println!("{:?}", tx);
+    }
     println!("Number of completed tx: {:?}", txs.len());
     println!("===================");
 

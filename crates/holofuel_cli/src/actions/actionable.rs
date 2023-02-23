@@ -17,7 +17,8 @@ pub async fn get() -> Result<()> {
 
     println!("===================");
     println!("Your Actionable List is: ");
-    println!("{:?}", txs);
+    println!("Invoices: {:?}", txs.invoice_actionable);
+    println!("Promises: {:?}", txs.promise_actionable);
     println!(
         "Number of actionable: {:?}",
         txs.invoice_actionable.len() + txs.promise_actionable.len()

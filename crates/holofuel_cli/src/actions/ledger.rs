@@ -17,7 +17,10 @@ pub async fn get() -> Result<()> {
 
     println!("===================");
     println!("Your Ledger is: ");
-    println!("{:?}", ledger);
+    println!("Balance: {:?}", ledger.balance);
+    println!("Promised amt: {:?}", ledger.promised);
+    println!("Fees to be paid: {:?}", ledger.fees);
+    println!("Available Bal: {:?}", ledger.available);
     println!("===================");
 
     Ok(())
