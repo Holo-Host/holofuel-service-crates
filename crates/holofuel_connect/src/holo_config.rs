@@ -25,13 +25,18 @@ pub fn get_lair_url() -> Result<Url> {
 }
 
 fn read_lair_config() -> Result<LairServerConfigInner> {
-    let file = File::open(default_lair_dir())?;
+    let file = File::open(default_lair_dir()?)?;
     let config: LairServerConfigInner = serde_yaml::from_reader(file)?;
     Ok(config)
 }
 
-fn default_lair_dir() -> String {
-    "/var/lib/holochain-rsm/lair/lair-keystore-config.yaml".to_string()
+fn default_lair_dir() -> Result<String> {
+    let working_dir = env::var("HOLOCHAIN_WORKING_DIR")
+        .context("Failed to read HOLOCHAIN_WORKING_DIR. Is it set in env?")?;
+    Ok(format!(
+        "{}/lair-keystore/lair-keystore-config.yaml",
+        working_dir
+    ))
 }
 
 /// Configuration of a single hApp from config.yaml
