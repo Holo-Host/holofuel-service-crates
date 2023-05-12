@@ -1,5 +1,5 @@
 [package]
-name = "holofuel_connect"
+name = "hpos_hc_connect"
 version = "0.1.0"
 edition = "2021"
 

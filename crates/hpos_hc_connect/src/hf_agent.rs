@@ -15,6 +15,7 @@ pub struct HolofuelAgent {
 }
 
 impl HolofuelAgent {
+    /// connects to a holofuel agent that is running on a hpos server
     pub async fn connect() -> Result<Self> {
         let app_websocket = AppWebsocket::connect(format!("ws://localhost:{}/", APP_PORT))
             .await
@@ -41,6 +42,7 @@ impl HolofuelAgent {
         })
     }
 
+    /// get cell details of the holofuel agent
     pub async fn get_cell(&mut self) -> Result<(ProvisionedCell, AgentPubKey)> {
         match self
             .app_websocket
@@ -64,6 +66,7 @@ impl HolofuelAgent {
         }
     }
 
+    /// make a zome call to the holofuel agent that is running on a hpos server
     pub async fn zome_call(
         &mut self,
         zome_name: ZomeName,

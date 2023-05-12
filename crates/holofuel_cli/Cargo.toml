@@ -10,4 +10,4 @@ tokio = { version = "1.11", features = [ "full" ] }
 structopt = "0.3.0"
 serde = { version = "1.0", features = ["derive"] }
 rmp-serde = "1.1.1"
-holofuel_connect = { path = "../holofuel_connect" }
+hpos_hc_connect = { version="0.1.0", path = "../hpos_hc_connect" }
