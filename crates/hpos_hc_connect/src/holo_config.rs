@@ -24,7 +24,7 @@ pub fn get_lair_url() -> Result<Url> {
         Ok(url_string) => {
             let url = Url::parse(&url_string)?;
             Ok(url)
-        },
+        }
         Err(_) => {
             let config = read_lair_config()?;
             Ok(config.connection_url)

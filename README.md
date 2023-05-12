@@ -33,3 +33,17 @@ This crate initializes the holochain init function and also set a profile name f
 FEE_COLLECTOR_PUBKEY=<public key of the fee collector for the holofuel app>
 EXPECT_PUBKEY=<test is this key is used on the server>
 ```
+
+## hpos_hc_connect
+
+This crate provides the core functionality to spin up a holochain environment with a `core_happ` (hha and hf) bundle as a host would from the hpos and provide simplified signed zome calls. This is primarly inteneded as a testing utility. 
+
+### Expected Enviroment vars
+
+```
+HOLOCHAIN_DEFAULT_PASSWORD=<string password to use when spinning up holochain>
+CORE_HAPP_FILE=<string uri to address of hpos `core_happ` yaml file >
+LAIR_CONNECTION_URL=<string uri to lcoation of lair keystore> *OPTIONAL*
+HOLOCHAIN_WORKING_DIR=<string uri to location of holochain director> *OPTIONAL*
+
+```
