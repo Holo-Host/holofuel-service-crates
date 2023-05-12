@@ -36,14 +36,27 @@ EXPECT_PUBKEY=<test is this key is used on the server>
 
 ## hpos_hc_connect
 
-This crate provides the core functionality to spin up a holochain environment with a `core_happ` (hha and hf) bundle as a host would from the hpos and provide simplified signed zome calls. This is primarly inteneded as a testing utility. 
+This crate can be used to connect to holofuel running on a hpos profile that is installed by configure-holochain
 
-### Expected Enviroment vars
+### Needed enviroment variables
 
 ```
-HOLOCHAIN_DEFAULT_PASSWORD=<string password to use when spinning up holochain>
-CORE_HAPP_FILE=<string uri to address of hpos `core_happ` yaml file >
-LAIR_CONNECTION_URL=<string uri to lcoation of lair keystore> *OPTIONAL*
-HOLOCHAIN_WORKING_DIR=<string uri to location of holochain director> *OPTIONAL*
+HOLOCHAIN_DEFAULT_PASSWORD=<password to unlock holochain conductor>
+CORE_HAPP_FILE=<path to a config.json file used for the configure-holochain service>
+HOLOCHAIN_WORKING_DIR=<path to holochains working dir>
+DEV_UID_OVERRIDE=<network-seed that is used to create new hash spaces with different holo-nixpkgs builds>
+```
 
+### Example:
+
+```rust
+    use hpos_hc_connect::HolofuelAgent;
+    let mut agent: HolofuelAgent = HolofuelAgent::connect().await?;
+    let result: ExternIO = agent
+        .zome_call(
+            ZomeName::from("transactor"),
+            FunctionName::from("get_ledger"),
+            ExternIO::encode(())?,
+        )
+        .await?;
 ```
