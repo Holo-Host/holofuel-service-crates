@@ -20,8 +20,16 @@ pub fn default_core_happ_file() -> Result<String> {
 }
 
 pub fn get_lair_url() -> Result<Url> {
-    let config = read_lair_config()?;
-    Ok(config.connection_url)
+    match env::var("LAIR_CONNECTION_URL") {
+        Ok(url_string) => {
+            let url = Url::parse(&url_string)?;
+            Ok(url)
+        },
+        Err(_) => {
+            let config = read_lair_config()?;
+            Ok(config.connection_url)
+        }
+    }
 }
 
 fn read_lair_config() -> Result<LairServerConfigInner> {
