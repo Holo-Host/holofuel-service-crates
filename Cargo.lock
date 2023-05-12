@@ -1803,7 +1803,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "holochain_types",
- "holofuel_connect",
+ "hpos_hc_connect",
  "rmp-serde 1.1.1",
  "serde",
  "structopt",
@@ -2238,29 +2238,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "holofuel_connect"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "getrandom 0.2.8",
- "holochain_client",
- "holochain_conductor_api",
- "holochain_keystore",
- "holochain_types",
- "lair_keystore_api",
- "serde",
- "sodoken",
- "tokio",
- "url2",
-]
-
-[[package]]
 name = "holofuel_init"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "holochain_types",
- "holofuel_connect",
+ "hpos_hc_connect",
  "serde",
  "tokio",
 ]
@@ -2283,6 +2266,23 @@ dependencies = [
  "libc",
  "match_cfg",
  "winapi",
+]
+
+[[package]]
+name = "hpos_hc_connect"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "getrandom 0.2.8",
+ "holochain_client",
+ "holochain_conductor_api",
+ "holochain_keystore",
+ "holochain_types",
+ "lair_keystore_api",
+ "serde",
+ "sodoken",
+ "tokio",
+ "url2",
 ]
 
 [[package]]

@@ -1,7 +1,7 @@
 use super::holofuel_types::Actionable;
 use anyhow::Result;
 use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
-use holofuel_connect::HolofuelAgent;
+use hpos_hc_connect::HolofuelAgent;
 
 pub async fn get() -> Result<()> {
     let mut agent = HolofuelAgent::connect().await?;
