@@ -2429,7 +2429,9 @@ dependencies = [
  "holochain_types",
  "hpos_hc_connect",
  "serde",
+ "serde_yaml",
  "tokio",
+ "tracing",
 ]
 
 [[package]]
