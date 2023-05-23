@@ -74,10 +74,10 @@ pub fn fee_collector_pubkey() -> Result<HoloHashB64<Agent>> {
 }
 
 pub fn expect_pubkey() -> Option<HoloHashB64<Agent>> {
-    match env::var("EXPECT_PUBKEY") {
-        Ok(key) => {
-            Some(HoloHashB64::from_b64_str(&key).expect("unable to deserialized EXPECT_PUBKEY"))
+    if let Ok(key) = env::var("EXPECT_PUBKEY") {
+        if let Ok(k) = HoloHashB64::from_b64_str(&key) {
+            return Some(k);
         }
-        Err(_) => None,
     }
+    None
 }
