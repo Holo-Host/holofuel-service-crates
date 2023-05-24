@@ -2466,8 +2466,10 @@ dependencies = [
  "holochain_types",
  "lair_keystore_api",
  "serde",
+ "serde_yaml",
  "sodoken",
  "tokio",
+ "tracing",
  "url2",
 ]
 

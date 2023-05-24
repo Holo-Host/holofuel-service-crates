@@ -1,6 +1,6 @@
-use super::holofuel_types::Profile;
 use anyhow::Result;
 use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
+use hpos_hc_connect::holofuel_types::Profile;
 use hpos_hc_connect::HolofuelAgent;
 
 pub async fn get() -> Result<()> {

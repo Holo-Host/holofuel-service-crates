@@ -18,6 +18,10 @@ pub enum Opt {
     /// Gets profile details
     #[structopt(name = "pr")]
     Profile,
+    #[structopt(name = "rs")]
+    ReserveSetting,
+    #[structopt(name = "rsp")]
+    ReserveSalePrice,
 }
 impl Opt {
     /// Run this command
@@ -28,6 +32,8 @@ impl Opt {
             Opt::Actionable => hf::actions::actionable::get().await?,
             Opt::Completed => hf::actions::completed::get().await?,
             Opt::Profile => hf::actions::profile::get().await?,
+            Opt::ReserveSetting => hf::actions::reserve::get_setting().await?,
+            Opt::ReserveSalePrice => hf::actions::reserve::get_sale_price().await?,
         }
         Ok(())
     }

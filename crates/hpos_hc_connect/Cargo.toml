@@ -15,3 +15,5 @@ serde = { version = "1.0", features = ["derive"] }
 url2 = "0.0.6"
 sodoken = "0.0.9"
 getrandom = "0.2.7"
+serde_yaml = "0.9.11"
+tracing = "0.1.37"

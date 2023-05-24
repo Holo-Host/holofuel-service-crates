@@ -3,8 +3,7 @@ use holochain_types::prelude::{
     hash_type::Agent, holochain_serial, ExternIO, FunctionName, HoloHashB64, SerializedBytes,
     ZomeName,
 };
-use hpos_hc_connect::HolofuelAgent;
-use reserve_init::ReserveSetting;
+use hpos_hc_connect::{holofuel_types::ReserveSetting, HolofuelAgent};
 use serde::Deserialize;
 use serde::Serialize;
 use std::env;

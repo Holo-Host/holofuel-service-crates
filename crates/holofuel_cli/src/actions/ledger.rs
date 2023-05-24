@@ -1,6 +1,6 @@
-use super::holofuel_types::Ledger;
 use anyhow::Result;
 use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
+use hpos_hc_connect::holofuel_types::Ledger;
 use hpos_hc_connect::HolofuelAgent;
 
 pub async fn get() -> Result<()> {
