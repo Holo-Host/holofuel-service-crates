@@ -7,6 +7,7 @@ use hpos_hc_connect::{holofuel_types::ReserveSetting, HolofuelAgent};
 use serde::Deserialize;
 use serde::Serialize;
 use std::env;
+use tracing::debug;
 use tracing::info;
 mod reserve_init;
 
@@ -45,7 +46,9 @@ async fn main() -> Result<()> {
     if ReserveSetting::load_happ_file().is_ok() {
         nickname = Some("HOT Reserve".to_string());
     }
-
+    debug!("Setting nickname as {:?}", nickname);
+    let _a = load_happ_file()?;
+    debug!("settings {:?}", _a);
     if let Ok(_) = agent
         .zome_call(
             ZomeName::from("profile"),
@@ -64,6 +67,20 @@ async fn main() -> Result<()> {
     reserve_init::set_up_reserve(agent).await?;
     info!("Completed initializing the holofuel instance");
     Ok(())
+}
+
+pub fn load_happ_file() -> Result<ReserveSetting> {
+    use std::fs::File;
+    debug!("loading happ file");
+    let path = std::env::var("REGISTER_RESERVE")
+        .context("Failed to read REGISTER_RESERVE. Is it set in env?")?;
+    debug!("got path {}", path);
+    let file = File::open(path).context("failed to open file")?;
+    debug!("got file: {:?}", file);
+    let happ_file =
+        serde_yaml::from_reader(&file).context("failed to deserialize YAML as HappsFile")?;
+    debug!("happ file {:?}", happ_file);
+    Ok(happ_file)
 }
 
 pub fn fee_collector_pubkey() -> Result<HoloHashB64<Agent>> {
