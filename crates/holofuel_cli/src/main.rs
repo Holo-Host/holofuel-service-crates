@@ -18,8 +18,10 @@ pub enum Opt {
     /// Gets profile details
     #[structopt(name = "pr")]
     Profile,
+    /// Get All Reserves Accounts Settings
     #[structopt(name = "rs")]
     ReserveSetting,
+    /// Get this reserve accounts sales price
     #[structopt(name = "rsp")]
     ReserveSalePrice,
 }
