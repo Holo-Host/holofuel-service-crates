@@ -2430,7 +2430,7 @@ dependencies = [
  "hpos_hc_connect",
  "rmp-serde 1.1.1",
  "serde",
- "serde_yaml",
+ "serde_json",
  "tokio",
  "tracing",
 ]
@@ -2467,6 +2467,7 @@ dependencies = [
  "holochain_types",
  "lair_keystore_api",
  "serde",
+ "serde_json",
  "serde_yaml",
  "sodoken",
  "tokio",

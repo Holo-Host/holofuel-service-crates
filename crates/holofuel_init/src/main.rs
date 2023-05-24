@@ -70,15 +70,15 @@ async fn main() -> Result<()> {
 }
 
 pub fn load_happ_file() -> Result<ReserveSetting> {
-    use std::fs::File;
     debug!("loading happ file");
     let path = std::env::var("REGISTER_RESERVE")
         .context("Failed to read REGISTER_RESERVE. Is it set in env?")?;
     debug!("got path {}", path);
-    let file = File::open(path).context("failed to open file")?;
+    // let file = File::open(path).context("failed to open file")?;
+    let file = std::fs::read(path)?;
     debug!("got file: {:?}", file);
     let happ_file =
-        serde_yaml::from_reader(&file).context("failed to deserialize YAML as HappsFile")?;
+        serde_json::from_slice(&file).context("failed to deserialize YAML as HappsFile")?;
     debug!("happ file {:?}", happ_file);
     Ok(happ_file)
 }

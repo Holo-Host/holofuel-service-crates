@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use holochain_types::prelude::{
-    holochain_serial, AgentPubKeyB64, CapSecret, EntryHashB64, SerializedBytes,
+    holochain_serial, AgentPubKeyB64, CapSecret, EntryHashB64, SerializedBytes, X25519PubKey,
 };
 use holochain_types::prelude::{ActionHashB64, AnyDhtHashB64};
 use serde::Deserialize;
@@ -87,7 +87,7 @@ pub struct Reserve {
 pub struct ReserveSetting {
     pub external_reserve_currency: String,
     pub external_account_number: String,
-    pub external_signing_key: [u8; 32],
+    pub external_signing_key: X25519PubKey,
     pub default_promise_expiry: Duration,
     pub min_external_currency_tx_size: String,
     pub max_external_currency_tx_size: String,
@@ -95,15 +95,15 @@ pub struct ReserveSetting {
 }
 impl ReserveSetting {
     pub fn load_happ_file() -> Result<Self> {
-        use std::fs::File;
         debug!("loading happ file");
         let path = std::env::var("REGISTER_RESERVE")
             .context("Failed to read REGISTER_RESERVE. Is it set in env?")?;
         debug!("got path {}", path);
-        let file = File::open(path).context("failed to open file")?;
+        // let file = File::open(path).context("failed to open file")?;
+        let file = std::fs::read(path)?;
         debug!("got file: {:?}", file);
         let happ_file =
-            serde_yaml::from_reader(&file).context("failed to deserialize YAML as HappsFile")?;
+            serde_json::from_slice(&file).context("failed to deserialize YAML as HappsFile")?;
         debug!("happ file {:?}", happ_file);
         Ok(happ_file)
     }
@@ -113,4 +113,16 @@ impl ReserveSetting {
 pub struct ReserveSalePrice {
     pub latest_unit_price: String, // Number of HF units one external currency unit purchases, as determined by periodic (scheduled) runs of the pricing algorithm
     pub inputs_used: Vec<String>,
+}
+
+#[cfg(test)]
+pub mod tests {
+    use crate::holofuel_types::ReserveSetting;
+
+    #[test]
+    fn read_file() {
+        use std::env::set_var;
+        set_var("REGISTER_RESERVE", "./test/reserve_details.json");
+        ReserveSetting::load_happ_file().unwrap();
+    }
 }
