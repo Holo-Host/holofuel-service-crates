@@ -7,7 +7,7 @@ pub async fn get_setting() -> Result<()> {
     let mut agent = HolofuelAgent::connect().await?;
     let result = agent
         .zome_call(
-            ZomeName::from("reserve"),
+            ZomeName::from("reserves"),
             FunctionName::from("get_all_reserve_accounts_details"),
             ExternIO::encode(())?,
         )
@@ -27,7 +27,7 @@ pub async fn get_sale_price() -> Result<()> {
     let mut agent = HolofuelAgent::connect().await?;
     let result = agent
         .zome_call(
-            ZomeName::from("reserve"),
+            ZomeName::from("reserves"),
             FunctionName::from("get_my_sale_price"),
             ExternIO::encode(())?,
         )
