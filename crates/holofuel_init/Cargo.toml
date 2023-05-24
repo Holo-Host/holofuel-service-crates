@@ -11,3 +11,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9.11"
 hpos_hc_connect = { version="0.1.0", path = "../hpos_hc_connect" }
 tracing = "0.1.37"
+rmp-serde = "1.1.1"

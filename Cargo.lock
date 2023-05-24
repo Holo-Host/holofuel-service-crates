@@ -2428,6 +2428,7 @@ dependencies = [
  "anyhow",
  "holochain_types",
  "hpos_hc_connect",
+ "rmp-serde 1.1.1",
  "serde",
  "serde_yaml",
  "tokio",
