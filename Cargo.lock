@@ -1944,7 +1944,7 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hf"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "holochain_types",
@@ -2428,8 +2428,10 @@ dependencies = [
  "anyhow",
  "holochain_types",
  "hpos_hc_connect",
+ "rmp-serde 1.1.1",
  "serde",
  "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -2464,8 +2466,11 @@ dependencies = [
  "holochain_types",
  "lair_keystore_api",
  "serde",
+ "serde_json",
+ "serde_yaml",
  "sodoken",
  "tokio",
+ "tracing",
  "url2",
 ]
 
