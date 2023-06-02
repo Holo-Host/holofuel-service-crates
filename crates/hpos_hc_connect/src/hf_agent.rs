@@ -2,11 +2,11 @@ use super::holo_config::{self, HappsFile, APP_PORT};
 use anyhow::{anyhow, Context, Result};
 use holochain_client::{AgentPubKey, AppWebsocket};
 use holochain_conductor_api::{AppInfo, CellInfo, ProvisionedCell, ZomeCall};
-use holochain_keystore::{ AgentPubKeyExt, MetaLairClient };
+use holochain_keystore::{AgentPubKeyExt, MetaLairClient};
 use holochain_types::prelude::{
     ExternIO, FunctionName, Nonce256Bits, Signature, Timestamp, ZomeCallUnsigned, ZomeName,
 };
-use std::{time::Duration, sync::Arc};
+use std::{sync::Arc, time::Duration};
 
 pub struct HolofuelAgent {
     app_websocket: AppWebsocket,
