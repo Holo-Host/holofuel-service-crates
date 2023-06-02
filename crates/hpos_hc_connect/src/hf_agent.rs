@@ -2,10 +2,11 @@ use super::holo_config::{self, HappsFile, APP_PORT};
 use anyhow::{anyhow, Context, Result};
 use holochain_client::{AgentPubKey, AppWebsocket};
 use holochain_conductor_api::{AppInfo, CellInfo, ProvisionedCell, ZomeCall};
-use holochain_keystore::MetaLairClient;
+use holochain_keystore::{ AgentPubKeyExt, MetaLairClient };
 use holochain_types::prelude::{
-    ExternIO, FunctionName, Nonce256Bits, Timestamp, ZomeCallUnsigned, ZomeName,
+    ExternIO, FunctionName, Nonce256Bits, Signature, Timestamp, ZomeCallUnsigned, ZomeName,
 };
+use std::{time::Duration, sync::Arc};
 
 pub struct HolofuelAgent {
     app_websocket: AppWebsocket,
@@ -66,6 +67,12 @@ impl HolofuelAgent {
         }
     }
 
+    /// Sign byte payload with holofuel agent's private key
+    pub async fn sign_raw(&mut self, data: Arc<[u8]>) -> Result<Signature> {
+        let (_, agent_pubkey) = self.get_cell().await?;
+        Ok(agent_pubkey.sign_raw(&self.keystore, data).await?)
+    }
+
     /// make a zome call to the holofuel agent that is running on a hpos server
     pub async fn zome_call(
         &mut self,
@@ -97,7 +104,6 @@ impl HolofuelAgent {
     }
 }
 
-use std::time::Duration;
 /// generates nonce for zome calls
 fn fresh_nonce() -> Result<(Nonce256Bits, Timestamp)> {
     let mut bytes = [0; 32];
