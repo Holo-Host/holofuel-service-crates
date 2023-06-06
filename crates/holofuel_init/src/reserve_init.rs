@@ -2,9 +2,9 @@ use anyhow::Result;
 use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
 use hpos_hc_connect::holofuel_types::{Reserve, ReserveSalePrice, ReserveSetting};
 use hpos_hc_connect::HolofuelAgent;
-use tracing::log::trace;
-use tracing::{info, log::warn};
+use tracing::{info, warn, trace, instrument};
 
+#[instrument(err, skip(agent))]
 pub async fn set_up_reserve(mut agent: HolofuelAgent) -> Result<()> {
     trace!("Setting up reserve settings...");
     match ReserveSetting::load_happ_file() {
