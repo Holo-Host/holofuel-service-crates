@@ -20,7 +20,6 @@ async fn main() -> Result<()> {
         // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
         // will be written to stdout.
         .with_max_level(Level::TRACE)
-        // completes the builder.
         .finish();
 
     tracing::subscriber::set_global_default(subscriber)?;
@@ -48,7 +47,7 @@ async fn main() -> Result<()> {
 
     let fpk = fee_collector_pubkey()?;
     let mut nickname = Some("Holo Account".to_string());
-    if fpk == apk.into() {
+    if fpk == apk.clone().into() {
         nickname = Some("Holo Fee Collector".to_string());
     }
     if ReserveSetting::load_happ_file().is_ok() {
@@ -72,7 +71,7 @@ async fn main() -> Result<()> {
     };
 
     // initialize reserve details
-    reserve_init::set_up_reserve(agent).await?;
+    reserve_init::set_up_reserve(agent, apk).await?;
     info!("Completed initializing the holofuel instance");
     Ok(())
 }
