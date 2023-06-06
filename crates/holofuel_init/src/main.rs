@@ -4,11 +4,10 @@ use holochain_types::prelude::{
     ZomeName,
 };
 use hpos_hc_connect::{holofuel_types::ReserveSetting, HolofuelAgent};
-use serde::Deserialize;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::env;
-use tracing::debug;
-use tracing::info;
+use tracing::{debug, info, Level};
+use tracing_subscriber::FmtSubscriber;
 mod reserve_init;
 
 /// Initialize the holofuel app on a holochain instance server
@@ -17,6 +16,15 @@ mod reserve_init;
 /// This is why we will be setting a profile name for holofuel the holofuel instance
 #[tokio::main]
 async fn main() -> Result<()> {
+    let subscriber = FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::TRACE)
+        // completes the builder.
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber)?;
+
     info!("Start initializing the holofuel instance");
 
     let mut agent = HolofuelAgent::connect().await?;
@@ -47,7 +55,8 @@ async fn main() -> Result<()> {
         nickname = Some("HOT Reserve".to_string());
     }
     debug!("Setting nickname as {:?}", nickname);
-    if let Ok(_) = agent
+
+    if (agent
         .zome_call(
             ZomeName::from("profile"),
             FunctionName::from("update_my_profile"),
@@ -56,7 +65,8 @@ async fn main() -> Result<()> {
                 avatar_url: None,
             })?,
         )
-        .await
+        .await)
+        .is_ok()
     {
         info!("Profile name set successfully");
     };

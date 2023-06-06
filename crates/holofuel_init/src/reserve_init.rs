@@ -18,7 +18,7 @@ pub async fn set_up_reserve(mut agent: HolofuelAgent) -> Result<()> {
                 )
                 .await?;
             let reserve: Vec<Reserve> = rmp_serde::from_slice(result.as_bytes())?;
-            if reserve.len() == 0 {
+            if reserve.is_empty() {
                 trace!("Setting reserve details");
                 // Setting initial reserve account details
                 agent
