@@ -3,7 +3,7 @@ use holochain_types::prelude::{
     hash_type::Agent, holochain_serial, ExternIO, FunctionName, HoloHashB64, SerializedBytes,
     ZomeName,
 };
-use hpos_hc_connect::{holofuel_types::ReserveSetting, HolofuelAgent};
+use hpos_hc_connect::{holofuel_types::ReserveSettingFile, HolofuelAgent};
 use serde::{Deserialize, Serialize};
 use std::env;
 use tracing::{debug, info, Level};
@@ -50,7 +50,7 @@ async fn main() -> Result<()> {
     if fpk == apk.clone().into() {
         nickname = Some("Holo Fee Collector".to_string());
     }
-    if ReserveSetting::load_happ_file().is_ok() {
+    if ReserveSettingFile::load_happ_file().is_ok() {
         nickname = Some("HOT Reserve".to_string());
     }
     debug!("Setting nickname as {:?}", nickname);
