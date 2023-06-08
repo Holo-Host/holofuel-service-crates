@@ -93,7 +93,17 @@ pub struct ReserveSetting {
     pub max_external_currency_tx_size: String,
     note: Option<String>,
 }
-impl ReserveSetting {
+
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
+pub struct ReserveSettingFile {
+    pub external_reserve_currency: String,
+    pub external_account_number: String,
+    pub default_promise_expiry: Duration,
+    pub min_external_currency_tx_size: String,
+    pub max_external_currency_tx_size: String,
+    note: Option<String>,
+}
+impl ReserveSettingFile {
     pub fn load_happ_file() -> Result<Self> {
         debug!("loading happ file");
         let path = std::env::var("REGISTER_RESERVE")
@@ -107,6 +117,18 @@ impl ReserveSetting {
         debug!("happ file {:?}", happ_file);
         Ok(happ_file)
     }
+
+    pub fn into_reserve_settings(self, agent_pub_key: X25519PubKey) -> ReserveSetting {
+        ReserveSetting {
+            external_reserve_currency: self.external_reserve_currency,
+            external_account_number: self.external_account_number,
+            external_signing_key: agent_pub_key,
+            default_promise_expiry: self.default_promise_expiry,
+            min_external_currency_tx_size: self.min_external_currency_tx_size,
+            max_external_currency_tx_size: self.max_external_currency_tx_size,
+            note: self.note,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
@@ -117,12 +139,12 @@ pub struct ReserveSalePrice {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::holofuel_types::ReserveSetting;
+    use crate::holofuel_types::ReserveSettingFile;
 
     #[test]
     fn read_file() {
         use std::env::set_var;
         set_var("REGISTER_RESERVE", "./test/reserve_details.json");
-        ReserveSetting::load_happ_file().unwrap();
+        ReserveSettingFile::load_happ_file().unwrap();
     }
 }

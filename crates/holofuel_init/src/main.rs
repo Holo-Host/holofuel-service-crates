@@ -3,12 +3,11 @@ use holochain_types::prelude::{
     hash_type::Agent, holochain_serial, ExternIO, FunctionName, HoloHashB64, SerializedBytes,
     ZomeName,
 };
-use hpos_hc_connect::{holofuel_types::ReserveSetting, HolofuelAgent};
-use serde::Deserialize;
-use serde::Serialize;
+use hpos_hc_connect::{holofuel_types::ReserveSettingFile, HolofuelAgent};
+use serde::{Deserialize, Serialize};
 use std::env;
-use tracing::debug;
-use tracing::info;
+use tracing::{debug, info, Level};
+use tracing_subscriber::FmtSubscriber;
 mod reserve_init;
 
 /// Initialize the holofuel app on a holochain instance server
@@ -17,6 +16,14 @@ mod reserve_init;
 /// This is why we will be setting a profile name for holofuel the holofuel instance
 #[tokio::main]
 async fn main() -> Result<()> {
+    let subscriber = FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::TRACE)
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber)?;
+
     info!("Start initializing the holofuel instance");
 
     let mut agent = HolofuelAgent::connect().await?;
@@ -40,14 +47,15 @@ async fn main() -> Result<()> {
 
     let fpk = fee_collector_pubkey()?;
     let mut nickname = Some("Holo Account".to_string());
-    if fpk == apk.into() {
+    if fpk == apk.clone().into() {
         nickname = Some("Holo Fee Collector".to_string());
     }
-    if ReserveSetting::load_happ_file().is_ok() {
+    if ReserveSettingFile::load_happ_file().is_ok() {
         nickname = Some("HOT Reserve".to_string());
     }
     debug!("Setting nickname as {:?}", nickname);
-    if let Ok(_) = agent
+
+    if (agent
         .zome_call(
             ZomeName::from("profile"),
             FunctionName::from("update_my_profile"),
@@ -56,13 +64,14 @@ async fn main() -> Result<()> {
                 avatar_url: None,
             })?,
         )
-        .await
+        .await)
+        .is_ok()
     {
         info!("Profile name set successfully");
     };
 
     // initialize reserve details
-    reserve_init::set_up_reserve(agent).await?;
+    reserve_init::set_up_reserve(agent, apk).await?;
     info!("Completed initializing the holofuel instance");
     Ok(())
 }
