@@ -1,12 +1,13 @@
 use anyhow::Result;
 use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
 use hpos_hc_connect::holofuel_types::Ledger;
-use hpos_hc_connect::HolofuelAgent;
+use hpos_hc_connect::{CoreAppAgent, CoreAppRoleName};
 
 pub async fn get() -> Result<()> {
-    let mut agent = HolofuelAgent::connect().await?;
+    let mut agent = CoreAppAgent::connect().await?;
     let result = agent
         .zome_call(
+            CoreAppRoleName::Holofuel,
             ZomeName::from("transactor"),
             FunctionName::from("get_ledger"),
             ExternIO::encode(())?,

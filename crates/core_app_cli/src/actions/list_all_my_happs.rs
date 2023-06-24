@@ -1,7 +1,10 @@
 use anyhow::Result;
-use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
-use hpos_hc_connect::holofuel_types::Ledger;
+use holochain_types::prelude::{
+    holochain_serial, ActionHashB64, AgentPubKeyB64, ExternIO, FunctionName, SerializedBytes,
+    ZomeName,
+};
 use hpos_hc_connect::{CoreAppAgent, CoreAppRoleName};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, SerializedBytes)]
 pub struct PresentedHappBundle {
@@ -12,7 +15,7 @@ pub struct PresentedHappBundle {
     pub uid: Option<String>,
     pub bundle_url: String,
     pub ui_src_url: Option<String>,
-    pub dnas: Vec<DnaResource>,
+    // pub dnas: Vec<DnaResource>,
     pub hosted_urls: Vec<String>,
     pub name: String,
     pub logo_url: Option<String>,
@@ -23,6 +26,19 @@ pub struct PresentedHappBundle {
     pub hosting_prices: HostingPrices,
     pub login_config: LoginConfig,
     pub special_installed_app_id: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, SerializedBytes)]
+pub struct HostingPrices {
+    pub cpu: String,
+    pub storage: String,
+    pub bandwidth: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, SerializedBytes)]
+pub struct LoginConfig {
+    pub display_publisher_name: bool,
+    pub registration_info_url: Option<String>,
 }
 
 pub async fn get() -> Result<()> {

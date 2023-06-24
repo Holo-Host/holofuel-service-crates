@@ -15,6 +15,9 @@ pub enum Opt {
     /// Pay your first pending invoice
     #[structopt(name = "pay")]
     PayInvoice,
+    /// List all happs published by me
+    #[structopt(name = "happs")]
+    Happs,
 }
 impl Opt {
     /// Run this command
@@ -24,6 +27,7 @@ impl Opt {
             Opt::Ledger => core_app_cli::ledger::get().await?,
             Opt::Transactions => core_app_cli::list_all_tx::get().await?,
             Opt::PayInvoice => core_app_cli::pay_invoices::get().await?,
+            Opt::Happs => core_app_cli::list_all_my_happs::get().await?,
         }
         Ok(())
     }

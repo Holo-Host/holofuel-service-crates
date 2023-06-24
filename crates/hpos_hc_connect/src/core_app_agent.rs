@@ -115,7 +115,7 @@ impl CoreAppRoleName {
     fn id(&self) -> &str {
         match self {
             CoreAppRoleName::HHA => "core-app",
-            CoreAppRoleName::Holofuel => "core-app",
+            CoreAppRoleName::Holofuel => "holofuel",
         }
     }
 }
