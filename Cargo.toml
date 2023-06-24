@@ -2,6 +2,7 @@
 
 members = [
   "crates/holofuel_cli",
+  "crates/core_app_cli",
   "crates/hpos_hc_connect",
   "crates/holofuel_init",
 ]
