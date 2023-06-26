@@ -39,7 +39,9 @@ impl HolofuelAgent {
             holofuel_id = id;
         } else {
             let app_file = HappsFile::build()?;
-            let holofuel = app_file.holofuel().ok_or(anyhow!("Could not find a holofuel in HPOS file"))?;
+            let holofuel = app_file
+                .holofuel()
+                .ok_or(anyhow!("Could not find a holofuel in HPOS file"))?;
             holofuel_id = holofuel.id();
         }
 
@@ -65,7 +67,10 @@ impl HolofuelAgent {
                 agent_pub_key,
                 ..
             }) => {
-                let cell = match &cell_info.get("holofuel").ok_or(anyhow!("there's no cell named holofuel!"))?[0] {
+                let cell = match &cell_info
+                    .get("holofuel")
+                    .ok_or(anyhow!("there's no cell named holofuel!"))?[0]
+                {
                     CellInfo::Provisioned(c) => c.clone(),
                     _ => return Err(anyhow!("unable to find holofuel")),
                 };
