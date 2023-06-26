@@ -16,8 +16,10 @@ pub struct HolofuelAgent {
 }
 
 impl HolofuelAgent {
-    /// connects to a holofuel agent that is running on a hpos server
-    pub async fn connect() -> Result<Self> {
+    /// Connect to a holofuel instance identified by an app_id. If app_id is passed as None, then
+    /// crate will read app_id from data passed in environmental variables CORE_HAPP_FILE and DEV_UID_OVERRIDE
+    /// so that it connects to a default holofuel instance on HPOS
+    pub async fn connect(app_id: Option<String>) -> Result<Self> {
         let app_websocket = AppWebsocket::connect(format!("ws://localhost:{}/", APP_PORT))
             .await
             .context("failed to connect to holochain's app interface")?;
@@ -32,14 +34,20 @@ impl HolofuelAgent {
         )
         .await?;
 
-        let app_file = HappsFile::build()?;
-        let holofuel = app_file.holofuel().unwrap();
+        let mut holofuel_id = "".to_string();
+        if let Some(id) = app_id {
+            holofuel_id = id;
+        } else {
+            let app_file = HappsFile::build()?;
+            let holofuel = app_file.holofuel().ok_or(anyhow!("Could not find a holofuel in HPOS file"))?;
+            holofuel_id = holofuel.id();
+        }
 
         Ok(Self {
             app_websocket,
             // admin_websocket,
             keystore,
-            holofuel_id: holofuel.id(),
+            holofuel_id,
         })
     }
 
@@ -57,7 +65,7 @@ impl HolofuelAgent {
                 agent_pub_key,
                 ..
             }) => {
-                let cell = match &cell_info.get("holofuel").unwrap()[0] {
+                let cell = match &cell_info.get("holofuel").ok_or(anyhow!("there's no cell named holofuel!"))?[0] {
                     CellInfo::Provisioned(c) => c.clone(),
                     _ => return Err(anyhow!("unable to find holofuel")),
                 };

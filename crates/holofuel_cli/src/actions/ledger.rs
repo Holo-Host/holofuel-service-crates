@@ -4,7 +4,7 @@ use hpos_hc_connect::holofuel_types::Ledger;
 use hpos_hc_connect::HolofuelAgent;
 
 pub async fn get() -> Result<()> {
-    let mut agent = HolofuelAgent::connect().await?;
+    let mut agent = HolofuelAgent::connect(None).await?;
     let result = agent
         .zome_call(
             ZomeName::from("transactor"),
