@@ -98,7 +98,13 @@ impl HappsFile {
             .find(|x| x.id().contains("holofuel"));
         core_app.clone()
     }
-
+    pub fn core_app(self) -> Option<Happ> {
+        let core_app = &self
+            .core_happs
+            .into_iter()
+            .find(|x| x.id().contains("core-app"));
+        core_app.clone()
+    }
     pub fn build() -> Result<Self> {
         let file = File::open(default_core_happ_file()?).context("failed to open file")?;
         let happ_file =

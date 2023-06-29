@@ -7,18 +7,16 @@ use holochain_keystore::{AgentPubKeyExt, MetaLairClient};
 use holochain_types::prelude::{ExternIO, FunctionName, Signature, ZomeCallUnsigned, ZomeName};
 use std::sync::Arc;
 
-pub struct HolofuelAgent {
+pub struct CoreAppAgent {
     app_websocket: AppWebsocket,
     // admin_websocket: AdminWebsocket,
     keystore: MetaLairClient,
-    holofuel_id: String,
+    core_app_id: String,
 }
 
-impl HolofuelAgent {
-    /// Connect to a holofuel instance identified by an app_id. If app_id is passed as None, then
-    /// crate will read app_id from data passed in environmental variables CORE_HAPP_FILE and DEV_UID_OVERRIDE
-    /// so that it connects to a default holofuel instance on HPOS
-    pub async fn connect(app_id: Option<String>) -> Result<Self> {
+impl CoreAppAgent {
+    /// connects to a holofuel agent that is running on a hpos server
+    pub async fn connect() -> Result<Self> {
         let app_websocket = AppWebsocket::connect(format!("ws://localhost:{}/", APP_PORT))
             .await
             .context("failed to connect to holochain's app interface")?;
@@ -33,30 +31,25 @@ impl HolofuelAgent {
         )
         .await?;
 
-        let mut holofuel_id = "".to_string();
-        if let Some(id) = app_id {
-            holofuel_id = id;
-        } else {
-            let app_file = HappsFile::build()?;
-            let holofuel = app_file
-                .holofuel()
-                .ok_or(anyhow!("Could not find a holofuel in HPOS file"))?;
-            holofuel_id = holofuel.id();
-        }
+        let app_file = HappsFile::build()?;
+        let core_app = app_file.core_app().unwrap();
 
         Ok(Self {
             app_websocket,
             // admin_websocket,
             keystore,
-            holofuel_id,
+            core_app_id: core_app.id(),
         })
     }
 
-    /// get cell details of the holofuel agent
-    pub async fn get_cell(&mut self) -> Result<(ProvisionedCell, AgentPubKey)> {
+    /// get cell details of the hha agent
+    pub async fn get_cell(
+        &mut self,
+        role_name: CoreAppRoleName,
+    ) -> Result<(ProvisionedCell, AgentPubKey)> {
         match self
             .app_websocket
-            .app_info(self.holofuel_id.clone())
+            .app_info(self.core_app_id.clone())
             .await
             .map_err(|err| anyhow!("{:?}", err))?
         {
@@ -66,33 +59,31 @@ impl HolofuelAgent {
                 agent_pub_key,
                 ..
             }) => {
-                let cell = match &cell_info
-                    .get("holofuel")
-                    .ok_or(anyhow!("there's no cell named holofuel!"))?[0]
-                {
+                let cell = match &cell_info.get(role_name.id()).unwrap()[0] {
                     CellInfo::Provisioned(c) => c.clone(),
-                    _ => return Err(anyhow!("unable to find holofuel")),
+                    _ => return Err(anyhow!("unable to find {}", role_name.id())),
                 };
                 Ok((cell, agent_pub_key))
             }
             _ => Err(anyhow!("holofuel is not installed")),
         }
     }
-
     /// Sign byte payload with holofuel agent's private key
     pub async fn sign_raw(&mut self, data: Arc<[u8]>) -> Result<Signature> {
-        let (_, agent_pubkey) = self.get_cell().await?;
+        // We are signing all calls using the core-app agent because we are assuming both the cells have the same agent-key
+        let (_, agent_pubkey) = self.get_cell(CoreAppRoleName::HHA).await?;
         Ok(agent_pubkey.sign_raw(&self.keystore, data).await?)
     }
 
     /// make a zome call to the holofuel agent that is running on a hpos server
     pub async fn zome_call(
         &mut self,
+        role_name: CoreAppRoleName,
         zome_name: ZomeName,
         fn_name: FunctionName,
         payload: ExternIO,
     ) -> Result<ExternIO> {
-        let (cell, agent_pubkey) = self.get_cell().await?;
+        let (cell, agent_pubkey) = self.get_cell(role_name).await?;
         let (nonce, expires_at) = fresh_nonce()?;
         let zome_call_unsigned = ZomeCallUnsigned {
             cell_id: cell.cell_id,
@@ -113,5 +104,18 @@ impl HolofuelAgent {
             .await
             .map_err(|err| anyhow!("{:?}", err))?;
         Ok(response)
+    }
+}
+
+pub enum CoreAppRoleName {
+    HHA,
+    Holofuel,
+}
+impl CoreAppRoleName {
+    fn id(&self) -> &str {
+        match self {
+            CoreAppRoleName::HHA => "core-app",
+            CoreAppRoleName::Holofuel => "holofuel",
+        }
     }
 }
