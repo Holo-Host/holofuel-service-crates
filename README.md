@@ -71,7 +71,7 @@ HOLOCHAIN_WORKING_DIR=<path to holochains working dir> *OPTIONAL is LAIR_CONNECT
 
 ```rust
     use hpos_hc_connect::HolofuelAgent;
-    let mut agent: HolofuelAgent = HolofuelAgent::connect().await?;
+    let mut agent: HolofuelAgent = HolofuelAgent::connect(None).await?;
     let result: ExternIO = agent
         .zome_call(
             ZomeName::from("transactor"),

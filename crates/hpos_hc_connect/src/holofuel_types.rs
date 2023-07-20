@@ -1,8 +1,8 @@
 use anyhow::{Context, Result};
 use holochain_types::prelude::{
-    holochain_serial, AgentPubKeyB64, CapSecret, EntryHashB64, SerializedBytes, X25519PubKey,
+    holochain_serial, ActionHashB64, AgentPubKeyB64, AnyDhtHashB64, CapSecret, EntryHashB64,
+    SerializedBytes, Timestamp, X25519PubKey,
 };
-use holochain_types::prelude::{ActionHashB64, AnyDhtHashB64};
 use serde::Deserialize;
 use serde::Serialize;
 use std::time::Duration;
@@ -35,8 +35,8 @@ pub struct Transaction {
     pub id: EntryHashB64,
     pub amount: String,
     pub fee: String,
-    pub created_date: String,
-    pub completed_date: Option<String>,
+    pub created_date: Timestamp,
+    pub completed_date: Option<Timestamp>,
     pub transaction_type: TransactionType,
     pub counterparty: AgentPubKeyB64,
     pub direction: TransactionDirection,
@@ -44,7 +44,7 @@ pub struct Transaction {
     pub note: Option<String>,
     pub proof_of_service_token: Option<CapSecret>,
     pub url: Option<String>,
-    pub expiration_date: Option<String>,
+    pub expiration_date: Option<Timestamp>,
 }
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum TransactionType {
