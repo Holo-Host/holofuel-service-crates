@@ -25,7 +25,7 @@ pub async fn get() -> Result<()> {
         address: EntryHashB64,
         expiration_date: Option<Timestamp>,
     }
-    if txs.invoice_pending.len() > 0 {
+    if !txs.invoice_pending.is_empty() {
         println!("===================");
         println!("Going to accept first transaction");
         println!("Invoices Pending: {:?}", txs.invoice_pending[0]);

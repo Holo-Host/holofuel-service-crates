@@ -33,7 +33,7 @@ impl HolofuelAgent {
         )
         .await?;
 
-        let mut holofuel_id = "".to_string();
+        let holofuel_id: String;
         if let Some(id) = app_id {
             holofuel_id = id;
         } else {
