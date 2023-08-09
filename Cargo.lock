@@ -2002,9 +2002,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_client"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db7b1ec4e0b500b8c485c0c09a6e6918e9ec08c5b19b4e37459aa2584a8c96c8"
+checksum = "97f51dc982527dca0459316b69ef94c0a1a9f72d8673bb18cc7fef760111bfac"
 dependencies = [
  "again",
  "anyhow",
@@ -2390,9 +2390,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_websocket"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "26e49e8f9648b49f7ff79a267fa8a4f79df969788df712c243955cf7c6cc794a"
+checksum = "bbe693f24b355ba96957100b1c65a3fcb9578b7602ac0c3c56554d11e7b71bca"
 dependencies = [
  "futures",
  "ghost_actor 0.4.0-alpha.5",
