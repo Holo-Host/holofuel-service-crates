@@ -4,7 +4,7 @@ use hpos_hc_connect::holofuel_types::{Reserve, ReserveSalePrice};
 use hpos_hc_connect::HolofuelAgent;
 
 pub async fn get_setting() -> Result<()> {
-    let mut agent = HolofuelAgent::connect(None).await?;
+    let mut agent = HolofuelAgent::connect().await?;
     let result = agent
         .zome_call(
             ZomeName::from("reserves"),
@@ -24,7 +24,7 @@ pub async fn get_setting() -> Result<()> {
 }
 
 pub async fn get_sale_price() -> Result<()> {
-    let mut agent = HolofuelAgent::connect(None).await?;
+    let mut agent = HolofuelAgent::connect().await?;
     let result = agent
         .zome_call(
             ZomeName::from("reserves"),

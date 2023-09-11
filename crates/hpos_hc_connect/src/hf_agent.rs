@@ -18,7 +18,7 @@ impl HolofuelAgent {
     /// Connect to a holofuel instance identified by an app_id. If app_id is passed as None, then
     /// crate will read app_id from data passed in environmental variables CORE_HAPP_FILE and DEV_UID_OVERRIDE
     /// so that it connects to a default holofuel instance on HPOS
-    pub async fn connect(app_id: Option<String>) -> Result<Self> {
+    pub async fn connect() -> Result<Self> {
         let app_websocket = AppWebsocket::connect(format!("ws://localhost:{}/", APP_PORT))
             .await
             .context("failed to connect to holochain's app interface")?;
@@ -34,7 +34,7 @@ impl HolofuelAgent {
         .await?;
 
         let holofuel_id: String;
-        if let Some(id) = app_id {
+        if let Ok(id) = std::env::var("TEST_HOLOFUEL_ID") {
             holofuel_id = id;
         } else {
             let app_file = HappsFile::build()?;

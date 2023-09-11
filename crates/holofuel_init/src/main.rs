@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
 
     info!("Start initializing the holofuel instance");
 
-    let mut agent = HolofuelAgent::connect(None).await?;
+    let mut agent = HolofuelAgent::connect().await?;
 
     #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
     pub struct ProfileInput {
