@@ -18,7 +18,7 @@
 //! use hpos_hc_connect::HolofuelAgent;
 //! use holochain_types::prelude::{ExternIO, FunctionName, ZomeName};
 //! pub async fn test() {
-//!     let mut agent: HolofuelAgent = HolofuelAgent::connect(None).await.unwrap();
+//!     let mut agent: HolofuelAgent = HolofuelAgent::connect().await.unwrap();
 //!     let result: ExternIO = agent
 //!         .zome_call(
 //!             ZomeName::from("transactor"),
