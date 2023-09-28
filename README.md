@@ -1,4 +1,4 @@
-# holofuel service crates
+# holofuel service crates (depricated)
 
 > These crates are moved to [hpos-service-crates](https://github.com/Holo-Host/hpos-service-crates)
 
