@@ -1,5 +1,7 @@
 # holofuel service crates
 
+> These crates are moved to [hpos-service-crates](https://github.com/Holo-Host/hpos-service-crates)
+
 ## holofuel-cli
 
 A cli that runs on hpos to make holofuel zome-calls
@@ -24,6 +26,7 @@ SUBCOMMANDS:
 ```
 
 ## core_app_cli
+
 ```
 core_app_cli 0.1.0
 
